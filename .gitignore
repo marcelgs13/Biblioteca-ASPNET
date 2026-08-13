@@ -483,3 +483,8 @@ $RECYCLE.BIN/
 
 # Local project requirements
 Requisitos_BibliotecaAPI.md
+
+# Local SQLite database
+biblioteca.db
+biblioteca.db-shm
+biblioteca.db-wal
