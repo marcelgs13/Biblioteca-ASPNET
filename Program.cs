@@ -1,5 +1,6 @@
 using BibliotecaAPI.Data;
 using BibliotecaAPI.Repositories;
+using BibliotecaAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,10 @@ builder.Services.AddScoped<IAutorRepository, AutorRepository>();
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
 builder.Services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
+builder.Services.AddScoped<IAutorService, AutorService>();
+builder.Services.AddScoped<ILivroService, LivroService>();
+builder.Services.AddScoped<IAlunoService, AlunoService>();
+builder.Services.AddScoped<IEmprestimoService, EmprestimoService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
