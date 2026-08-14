@@ -35,18 +35,26 @@ public sealed class GlobalExceptionHandler(
 
         httpContext.Response.StatusCode = status;
 
-        await problemDetailsService.WriteAsync(new ProblemDetailsContext
+        var problemDetails = new ProblemDetails
+        {
+            Status = status,
+            Title = title,
+            Detail = detail,
+            Instance = httpContext.Request.Path
+        };
+
+        var problemDetailsContext = new ProblemDetailsContext
         {
             HttpContext = httpContext,
             Exception = exception,
-            ProblemDetails = new ProblemDetails
-            {
-                Status = status,
-                Title = title,
-                Detail = detail,
-                Instance = httpContext.Request.Path
-            }
-        });
+            ProblemDetails = problemDetails
+        };
+
+        if (!await problemDetailsService.TryWriteAsync(problemDetailsContext))
+        {
+            httpContext.Response.ContentType = "application/problem+json";
+            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        }
 
         return true;
     }
