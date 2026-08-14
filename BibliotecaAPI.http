@@ -1,6 +1,71 @@
 @BibliotecaAPI_HostAddress = http://localhost:5293
 
-GET {{BibliotecaAPI_HostAddress}}/weatherforecast/
+POST {{BibliotecaAPI_HostAddress}}/api/autores
+Content-Type: application/json
+
+{
+  "nome": "Robert C. Martin",
+  "dataNascimento": "1952-12-05",
+  "nacionalidade": "Americana"
+}
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/autores
+Accept: application/json
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/autores/1
+Accept: application/json
+
+###
+
+POST {{BibliotecaAPI_HostAddress}}/api/livros
+Content-Type: application/json
+
+{
+  "isbn": "9780132350884",
+  "titulo": "Clean Code",
+  "anoPublicacao": 2008,
+  "quantidade": 3,
+  "autorId": 1
+}
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/livros?titulo=clean&autor=martin
+Accept: application/json
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/livros/1
+Accept: application/json
+
+###
+
+POST {{BibliotecaAPI_HostAddress}}/api/alunos
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "matricula": "2026001",
+  "email": "joao@example.com"
+}
+
+###
+
+POST {{BibliotecaAPI_HostAddress}}/api/emprestimos
+Content-Type: application/json
+
+{
+  "alunoId": 1,
+  "livroId": 1
+}
+
+###
+
+PUT {{BibliotecaAPI_HostAddress}}/api/emprestimos/1/devolucao
 Accept: application/json
 
 ###
