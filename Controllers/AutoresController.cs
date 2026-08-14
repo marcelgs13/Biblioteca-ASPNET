@@ -6,24 +6,24 @@ namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AutoresController(IAutorService autorService) : ControllerBase
+public class AutoresController(IBibliotecaService bibliotecaService) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<AutorResponseDto>> Criar(CriarAutorDto dto)
     {
-        var autor = await autorService.CriarAsync(dto);
+        var autor = await bibliotecaService.CriarAutorAsync(dto);
         return CreatedAtAction(nameof(ObterPorId), new { id = autor.Id }, autor);
     }
 
     [HttpGet]
     public async Task<ActionResult<List<AutorResponseDto>>> Listar()
     {
-        return Ok(await autorService.ListarAsync());
+        return Ok(await bibliotecaService.ListarAutoresAsync());
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<AutorResponseDto>> ObterPorId(int id)
     {
-        return Ok(await autorService.ObterPorIdAsync(id));
+        return Ok(await bibliotecaService.ObterAutorPorIdAsync(id));
     }
 }

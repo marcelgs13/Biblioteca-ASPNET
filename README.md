@@ -23,8 +23,8 @@ BibliotecaAPI/
 ├── Exceptions/     # Exceções e tratamento global com ProblemDetails
 ├── Migrations/     # Histórico de evolução do banco de dados
 ├── Models/         # Entidades de domínio
-├── Repositories/   # Interfaces e implementações de acesso aos dados
-└── Services/       # Interfaces, regras de negócio e mapeamento de DTOs
+├── Repositories/   # Acesso centralizado aos dados por interface
+└── Services/       # Regras de negócio centralizadas por interface
 ```
 
 O fluxo principal de uma requisição é:
@@ -32,6 +32,9 @@ O fluxo principal de uma requisição é:
 ```text
 Cliente → Controller → Service → Repository → DbContext → SQLite
 ```
+
+Para facilitar a leitura do fluxo, o projeto utiliza uma interface e uma implementação
+centralizada em `Services` e outra em `Repositories`.
 
 ## Pré-requisitos
 

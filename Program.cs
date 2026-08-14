@@ -13,14 +13,8 @@ builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddDbContext<BibliotecaDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IAutorRepository, AutorRepository>();
-builder.Services.AddScoped<ILivroRepository, LivroRepository>();
-builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
-builder.Services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
-builder.Services.AddScoped<IAutorService, AutorService>();
-builder.Services.AddScoped<ILivroService, LivroService>();
-builder.Services.AddScoped<IAlunoService, AlunoService>();
-builder.Services.AddScoped<IEmprestimoService, EmprestimoService>();
+builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
+builder.Services.AddScoped<IBibliotecaService, BibliotecaService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

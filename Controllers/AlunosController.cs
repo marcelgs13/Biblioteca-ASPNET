@@ -6,12 +6,12 @@ namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AlunosController(IAlunoService alunoService) : ControllerBase
+public class AlunosController(IBibliotecaService bibliotecaService) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<AlunoResponseDto>> Criar(CriarAlunoDto dto)
     {
-        var aluno = await alunoService.CriarAsync(dto);
+        var aluno = await bibliotecaService.CriarAlunoAsync(dto);
         return StatusCode(StatusCodes.Status201Created, aluno);
     }
 }

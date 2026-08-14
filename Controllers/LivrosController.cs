@@ -6,12 +6,12 @@ namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LivrosController(ILivroService livroService) : ControllerBase
+public class LivrosController(IBibliotecaService bibliotecaService) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<LivroResponseDto>> Criar(CriarLivroDto dto)
     {
-        var livro = await livroService.CriarAsync(dto);
+        var livro = await bibliotecaService.CriarLivroAsync(dto);
         return CreatedAtAction(nameof(ObterPorId), new { id = livro.Id }, livro);
     }
 
@@ -20,12 +20,12 @@ public class LivrosController(ILivroService livroService) : ControllerBase
         [FromQuery] string? titulo,
         [FromQuery] string? autor)
     {
-        return Ok(await livroService.ListarAsync(titulo, autor));
+        return Ok(await bibliotecaService.ListarLivrosAsync(titulo, autor));
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<LivroResponseDto>> ObterPorId(int id)
     {
-        return Ok(await livroService.ObterPorIdAsync(id));
+        return Ok(await bibliotecaService.ObterLivroPorIdAsync(id));
     }
 }
