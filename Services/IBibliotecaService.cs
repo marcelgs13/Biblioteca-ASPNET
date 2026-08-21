@@ -13,6 +13,7 @@ public interface IBibliotecaService
     Task<LivroResponseDto> CriarLivroAsync(CriarLivroDto dto);
     Task<List<LivroResponseDto>> ListarLivrosAsync(string? titulo, string? autor);
     Task<LivroResponseDto> ObterLivroPorIdAsync(int id);
+    Task<LivroResponseDto> AtualizarLivroAsync(int id, AtualizarLivroDto dto);
 
     Task<AlunoResponseDto> CriarAlunoAsync(CriarAlunoDto dto);
     Task<List<AlunoResponseDto>> ListarAlunosAsync();

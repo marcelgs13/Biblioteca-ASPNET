@@ -80,6 +80,17 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
             .FirstOrDefaultAsync(livro => livro.Id == id);
     }
 
+    public Task<bool> ExisteISBNAsync(string isbn)
+    {
+        return context.Livros.AnyAsync(livro => livro.ISBN == isbn);
+    }
+
+    public async Task AtualizarLivroAsync(Livro livro)
+    {
+        context.Entry(livro).State = EntityState.Modified;
+        await context.SaveChangesAsync();
+    }
+
     public async Task<Aluno> AdicionarAlunoAsync(Aluno aluno)
     {
         await context.Alunos.AddAsync(aluno);
@@ -104,6 +115,11 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
     public Task<bool> ExisteMatriculaAsync(string matricula)
     {
         return context.Alunos.AnyAsync(aluno => aluno.Matricula == matricula);
+    }
+
+    public Task<bool> ExisteEmailAsync(string email)
+    {
+        return context.Alunos.AnyAsync(aluno => aluno.Email.ToLower() == email);
     }
 
     public Task<bool> AlunoPossuiEmprestimosAsync(int alunoId)

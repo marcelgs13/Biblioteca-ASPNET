@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestão de alunos da Biblioteca API">
+    <title>Alunos | Biblioteca API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="alunos">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html" aria-label="Biblioteca API - início"><span class="brand-mark" aria-hidden="true">B</span><span><span class="brand-name">Biblioteca API</span><span class="brand-subtitle">Gestão de acervo</span></span></a>
+            <p class="nav-label">Navegação</p>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a class="nav-link" href="index.html"><span class="nav-index">01</span>Visão geral</a>
+                <a class="nav-link" href="livros.html"><span class="nav-index">02</span>Livros</a>
+                <a class="nav-link" href="autores.html"><span class="nav-index">03</span>Autores</a>
+                <a class="nav-link" href="alunos.html" aria-current="page"><span class="nav-index">04</span>Alunos</a>
+                <a class="nav-link" href="emprestimos.html"><span class="nav-index">05</span>Empréstimos</a>
+            </nav>
+            <div class="sidebar-footer">Dados conectados à API<br>Biblioteca API • 2026</div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topline"><span class="breadcrumb">Painel / Alunos</span><span class="demo-label"><span class="demo-dot"></span>API conectada</span></div>
+            <header class="page-header"><div><p class="eyebrow">Comunidade</p><h1 class="page-title">Alunos da biblioteca</h1><p class="page-description">Consulte matrículas, contatos e o vínculo dos alunos com a biblioteca.</p></div></header>
+            <section class="content-grid">
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Alunos cadastrados</h2><p id="student-count" class="panel-subtitle">Carregando alunos...</p></div></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Aluno</th><th>Matrícula</th><th>E-mail</th><th>Empréstimos</th><th>Ações</th></tr></thead>
+                            <tbody id="students-body"><tr><td colspan="5" class="table-message">Carregando dados...</td></tr></tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <aside class="form-panel">
+                    <h2 class="form-title">Cadastrar aluno</h2>
+                    <p class="form-description">A matrícula deve ser única para cada aluno.</p>
+                    <form id="student-form" class="form-stack">
+                        <div class="field"><label for="nome">Nome completo</label><input id="nome" type="text" placeholder="Nome do aluno" required></div>
+                        <div class="field"><label for="matricula">Matrícula</label><input id="matricula" type="text" placeholder="MAT-2026-000" required></div>
+                        <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="aluno@ifpe.edu.br" required><span class="field-hint">Use um endereço com domínio @gmail.com ou @ifpe.edu.br.</span></div>
+                        <p class="empty-note">Alunos com qualquer empréstimo cadastrado mantêm seu histórico e não podem ser excluídos.</p>
+                        <div class="form-actions"><button class="primary-action" type="submit">Cadastrar aluno</button><button id="clear-student-form" class="secondary-action" type="button">Limpar campos</button></div>
+                    </form>
+                </aside>
+            </section>
+            <footer class="page-footer">Os registros exibidos são carregados diretamente da Biblioteca API.</footer>
+        </main>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>

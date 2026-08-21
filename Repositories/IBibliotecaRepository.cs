@@ -14,11 +14,14 @@ public interface IBibliotecaRepository
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<List<Livro>> ListarLivrosAsync(string? titulo, string? autor);
     Task<Livro?> ObterLivroPorIdAsync(int id);
+    Task<bool> ExisteISBNAsync(string isbn);
+    Task AtualizarLivroAsync(Livro livro);
 
     Task<Aluno> AdicionarAlunoAsync(Aluno aluno);
     Task<List<Aluno>> ListarAlunosAsync();
     Task<Aluno?> ObterAlunoPorIdAsync(int id);
     Task<bool> ExisteMatriculaAsync(string matricula);
+    Task<bool> ExisteEmailAsync(string email);
     Task<bool> AlunoPossuiEmprestimosAsync(int alunoId);
     Task RemoverAlunoAsync(Aluno aluno);
 

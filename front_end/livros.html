@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestão de livros da Biblioteca API">
+    <title>Livros | Biblioteca API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="livros">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html" aria-label="Biblioteca API - início"><span class="brand-mark" aria-hidden="true">B</span><span><span class="brand-name">Biblioteca API</span><span class="brand-subtitle">Gestão de acervo</span></span></a>
+            <p class="nav-label">Navegação</p>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a class="nav-link" href="index.html"><span class="nav-index">01</span>Visão geral</a>
+                <a class="nav-link" href="livros.html" aria-current="page"><span class="nav-index">02</span>Livros</a>
+                <a class="nav-link" href="autores.html"><span class="nav-index">03</span>Autores</a>
+                <a class="nav-link" href="alunos.html"><span class="nav-index">04</span>Alunos</a>
+                <a class="nav-link" href="emprestimos.html"><span class="nav-index">05</span>Empréstimos</a>
+            </nav>
+            <div class="sidebar-footer">Dados conectados à API<br>Biblioteca API • 2026</div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topline"><span class="breadcrumb">Painel / Livros</span><span class="demo-label"><span class="demo-dot"></span>API conectada</span></div>
+            <header class="page-header">
+                <div><p class="eyebrow">Catálogo</p><h1 class="page-title">Livros do acervo</h1><p class="page-description">Consulte a disponibilidade, filtre títulos e mantenha o catálogo organizado.</p></div>
+            </header>
+
+            <form id="book-filter-form" class="filter-bar" aria-label="Filtros do acervo">
+                <div class="field"><label for="filtro-titulo">Título</label><input id="filtro-titulo" type="search" placeholder="Ex.: Clean Code"></div>
+                <div class="field"><label for="filtro-autor">Autor</label><input id="filtro-autor" type="search" placeholder="Ex.: Martin"></div>
+                <div class="filter-actions"><button class="secondary-action" type="submit">Aplicar filtros</button><button id="clear-book-filters" class="text-action" type="button">Limpar</button></div>
+            </form>
+
+            <section class="content-grid">
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Acervo cadastrado</h2><p id="book-count" class="panel-subtitle">Carregando títulos...</p></div></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Livro</th><th>Autor</th><th>Ano</th><th>Disponíveis</th><th>Ações</th></tr></thead>
+                            <tbody id="books-body"><tr><td colspan="5" class="table-message">Carregando dados...</td></tr></tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <aside class="form-panel">
+                    <h2 id="book-form-title" class="form-title">Cadastrar livro</h2>
+                    <p class="form-description">Preencha os dados do novo título.</p>
+                    <form id="book-form" class="form-stack">
+                        <div class="field"><label for="titulo">Título</label><input id="titulo" type="text" placeholder="Nome do livro" required></div>
+                        <div class="field"><label for="isbn">ISBN</label><input id="isbn" type="text" placeholder="9780000000000" required></div>
+                        <div class="field"><label for="autor">Autor</label><select id="autor" required><option value="">Carregando autores...</option></select></div>
+                        <div class="form-row">
+                            <div class="field"><label for="ano">Ano</label><input id="ano" type="number" min="1" placeholder="2026" required></div>
+                            <div class="field"><label for="quantidade">Quantidade</label><input id="quantidade" type="number" min="0" placeholder="1" required></div>
+                        </div>
+                        <div class="form-actions"><button class="primary-action" type="submit">Cadastrar livro</button><button id="clear-book-form" class="secondary-action" type="button">Limpar campos</button></div>
+                    </form>
+                </aside>
+            </section>
+            <footer class="page-footer">Cadastros e consultas são persistidos pela Biblioteca API.</footer>
+        </main>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ API REST para gerenciamento de uma biblioteca, desenvolvida com ASP.NET Core. O 
 - Entity Framework Core 10
 - SQLite
 - OpenAPI 3.1 e Swagger UI
+- HTML, CSS e JavaScript no front-end
 - Git
 
 ## Arquitetura
@@ -24,7 +25,8 @@ BibliotecaAPI/
 ├── Migrations/     # Histórico de evolução do banco de dados
 ├── Models/         # Entidades de domínio
 ├── Repositories/   # Acesso centralizado aos dados por interface
-└── Services/       # Regras de negócio centralizadas por interface
+├── Services/       # Regras de negócio centralizadas por interface
+└── front_end/      # Interface web que consome a API
 ```
 
 O fluxo principal de uma requisição é:
@@ -75,6 +77,21 @@ A API ficará disponível em `http://localhost:5293`. A interface Swagger pode s
 http://localhost:5293/swagger
 ```
 
+### Executando o front-end
+
+Com a API em execução, abra o projeto no VS Code e instale a extensão recomendada
+**Live Server**. Clique com o botão direito em `front_end/index.html` e selecione
+**Open with Live Server**.
+
+O projeto configura o Live Server na porta `5500`. A interface ficará disponível em:
+
+```text
+http://127.0.0.1:5500/front_end/index.html
+```
+
+O front-end e a API são executados separadamente. A política CORS aceita o Live
+Server por `127.0.0.1:5500` e `localhost:5500`.
+
 ## Endpoints
 
 | Método | Endpoint | Descrição |
@@ -87,6 +104,7 @@ http://localhost:5293/swagger
 | `POST` | `/api/livros` | Cadastra um livro associado a um autor |
 | `GET` | `/api/livros` | Lista livros e aceita os filtros `titulo` e `autor` |
 | `GET` | `/api/livros/{id}` | Consulta um livro por ID |
+| `PUT` | `/api/livros/{id}` | Atualiza os dados e a quantidade disponível do livro |
 | `POST` | `/api/alunos` | Cadastra um aluno |
 | `GET` | `/api/alunos` | Lista os alunos |
 | `GET` | `/api/alunos/{id}` | Consulta um aluno por ID |
@@ -107,6 +125,9 @@ GET /api/livros?titulo=clean&autor=martin
 ## Regras de negócio
 
 - A matrícula do aluno deve ser única.
+- O e-mail do aluno deve ser único e é armazenado em letras minúsculas.
+- Recomenda-se o e-mail institucional `@ifpe.edu.br`, mas outros domínios válidos são aceitos.
+- Não é permitido cadastrar dois livros com o mesmo ISBN.
 - O autor informado no cadastro de um livro deve existir.
 - O aluno e o livro informados em um empréstimo devem existir.
 - Um livro sem exemplares disponíveis não pode ser emprestado.
@@ -114,6 +135,7 @@ GET /api/livros?titulo=clean&autor=martin
 - Ao emprestar um livro, a quantidade disponível é reduzida em uma unidade.
 - O prazo de devolução é definido em sete dias a partir do empréstimo.
 - Ao devolver um livro, a quantidade disponível é incrementada em uma unidade.
+- A atualização de um livro substitui a quantidade disponível pelo valor informado.
 - Um empréstimo já devolvido não pode ser devolvido novamente.
 - Autores com livros e alunos com empréstimos não podem ser excluídos.
 
@@ -136,10 +158,14 @@ O arquivo `biblioteca.db` é criado localmente pelo comando de migrations e não
 
 O repositório contém a migration inicial necessária para criar as tabelas, chaves estrangeiras e o índice único de matrícula.
 
+Ao atualizar um banco criado antes da migration `UniqueAlunoEmail`, corrija eventuais
+e-mails duplicados ou recrie o banco local antes de aplicar as migrations.
+
 ## Testes manuais
 
 As operações podem ser testadas de duas formas:
 
+- Pela interface web em `http://127.0.0.1:5500/front_end/index.html`.
 - Pela interface Swagger em `http://localhost:5293/swagger`.
 - Pelo arquivo `BibliotecaAPI.http`, usando um cliente HTTP compatível no editor.
 

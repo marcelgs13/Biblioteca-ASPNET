@@ -55,13 +55,26 @@ Accept: application/json
 
 ###
 
+PUT {{BibliotecaAPI_HostAddress}}/api/livros/1
+Content-Type: application/json
+
+{
+  "isbn": "9780132350884",
+  "titulo": "Clean Code Atualizado",
+  "anoPublicacao": 2008,
+  "quantidade": 5,
+  "autorId": 1
+}
+
+###
+
 POST {{BibliotecaAPI_HostAddress}}/api/alunos
 Content-Type: application/json
 
 {
   "nome": "João Silva",
   "matricula": "2026001",
-  "email": "joao@example.com"
+  "email": "joao@ifpe.edu.br"
 }
 
 ###

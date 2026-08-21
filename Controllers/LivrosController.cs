@@ -28,4 +28,10 @@ public class LivrosController(IBibliotecaService bibliotecaService) : Controller
     {
         return Ok(await bibliotecaService.ObterLivroPorIdAsync(id));
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<LivroResponseDto>> Atualizar(int id, AtualizarLivroDto dto)
+    {
+        return Ok(await bibliotecaService.AtualizarLivroAsync(id, dto));
+    }
 }

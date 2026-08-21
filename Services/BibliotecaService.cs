@@ -63,12 +63,19 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
 
     public async Task<LivroResponseDto> CriarLivroAsync(CriarLivroDto dto)
     {
+        var isbn = dto.ISBN.Trim();
+
+        if (await repository.ExisteISBNAsync(isbn))
+        {
+            throw new ConflitoNegocioException("Já existe um livro cadastrado com este ISBN.");
+        }
+
         var autor = await repository.ObterAutorPorIdAsync(dto.AutorId)
             ?? throw new RecursoNaoEncontradoException("Autor não encontrado.");
 
         var livro = new Livro
         {
-            ISBN = dto.ISBN,
+            ISBN = isbn,
             Titulo = dto.Titulo,
             AnoPublicacao = dto.AnoPublicacao,
             Quantidade = dto.Quantidade,
@@ -92,7 +99,7 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
     public async Task<List<LivroResponseDto>> ListarLivrosAsync(string? titulo, string? autor)
     {
         var livros = await repository.ListarLivrosAsync(titulo, autor);
-        return livros.Select(MapearLivro).ToList();
+        return livros.Select(livro => MapearLivro(livro)).ToList();
     }
 
     public async Task<LivroResponseDto> ObterLivroPorIdAsync(int id)
@@ -103,6 +110,24 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
         return MapearLivro(livro);
     }
 
+    public async Task<LivroResponseDto> AtualizarLivroAsync(int id, AtualizarLivroDto dto)
+    {
+        var livro = await repository.ObterLivroPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Livro não encontrado.");
+
+        var autor = await repository.ObterAutorPorIdAsync(dto.AutorId)
+            ?? throw new RecursoNaoEncontradoException("Autor não encontrado.");
+
+        livro.ISBN = dto.ISBN;
+        livro.Titulo = dto.Titulo;
+        livro.AnoPublicacao = dto.AnoPublicacao;
+        livro.Quantidade = dto.Quantidade;
+        livro.AutorId = dto.AutorId;
+
+        await repository.AtualizarLivroAsync(livro);
+        return MapearLivro(livro, autor.Nome);
+    }
+
     public async Task<AlunoResponseDto> CriarAlunoAsync(CriarAlunoDto dto)
     {
         if (await repository.ExisteMatriculaAsync(dto.Matricula))
@@ -110,11 +135,18 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
             throw new ConflitoNegocioException("Já existe um aluno com esta matrícula.");
         }
 
+        var email = dto.Email.Trim().ToLowerInvariant();
+
+        if (await repository.ExisteEmailAsync(email))
+        {
+            throw new ConflitoNegocioException("Já existe um aluno cadastrado com este e-mail.");
+        }
+
         var aluno = new Aluno
         {
             Nome = dto.Nome,
             Matricula = dto.Matricula,
-            Email = dto.Email
+            Email = email
         };
 
         await repository.AdicionarAlunoAsync(aluno);
@@ -229,7 +261,7 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
         };
     }
 
-    private static LivroResponseDto MapearLivro(Livro livro)
+    private static LivroResponseDto MapearLivro(Livro livro, string? autorNome = null)
     {
         return new LivroResponseDto
         {
@@ -239,7 +271,7 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
             AnoPublicacao = livro.AnoPublicacao,
             Quantidade = livro.Quantidade,
             AutorId = livro.AutorId,
-            AutorNome = livro.Autor.Nome
+            AutorNome = autorNome ?? livro.Autor.Nome
         };
     }
 

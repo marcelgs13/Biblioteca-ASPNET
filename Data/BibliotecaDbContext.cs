@@ -34,5 +34,9 @@ public class BibliotecaDbContext(DbContextOptions<BibliotecaDbContext> options) 
         modelBuilder.Entity<Aluno>()
             .HasIndex(aluno => aluno.Matricula)
             .IsUnique();
+
+        modelBuilder.Entity<Aluno>()
+            .HasIndex(aluno => aluno.Email)
+            .IsUnique();
     }
 }
