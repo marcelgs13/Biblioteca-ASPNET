@@ -27,6 +27,23 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
             .FirstOrDefaultAsync(autor => autor.Id == id);
     }
 
+    public async Task AtualizarAutorAsync(Autor autor)
+    {
+        context.Autores.Update(autor);
+        await context.SaveChangesAsync();
+    }
+
+    public Task<bool> AutorPossuiLivrosAsync(int autorId)
+    {
+        return context.Livros.AnyAsync(livro => livro.AutorId == autorId);
+    }
+
+    public async Task RemoverAutorAsync(Autor autor)
+    {
+        context.Autores.Remove(autor);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<Livro> AdicionarLivroAsync(Livro livro)
     {
         await context.Livros.AddAsync(livro);
@@ -70,6 +87,13 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
         return aluno;
     }
 
+    public Task<List<Aluno>> ListarAlunosAsync()
+    {
+        return context.Alunos
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public Task<Aluno?> ObterAlunoPorIdAsync(int id)
     {
         return context.Alunos
@@ -82,11 +106,36 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
         return context.Alunos.AnyAsync(aluno => aluno.Matricula == matricula);
     }
 
+    public Task<bool> AlunoPossuiEmprestimosAsync(int alunoId)
+    {
+        return context.Emprestimos.AnyAsync(emprestimo => emprestimo.AlunoId == alunoId);
+    }
+
+    public async Task RemoverAlunoAsync(Aluno aluno)
+    {
+        context.Alunos.Remove(aluno);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<Emprestimo> AdicionarEmprestimoAsync(Emprestimo emprestimo)
     {
         await context.Emprestimos.AddAsync(emprestimo);
         await context.SaveChangesAsync();
         return emprestimo;
+    }
+
+    public Task<List<Emprestimo>> ListarEmprestimosAsync()
+    {
+        return context.Emprestimos
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public Task<Emprestimo?> ObterEmprestimoPorIdAsync(int id)
+    {
+        return context.Emprestimos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(emprestimo => emprestimo.Id == id);
     }
 
     public Task<Emprestimo?> ObterEmprestimoPorIdComLivroAsync(int id)

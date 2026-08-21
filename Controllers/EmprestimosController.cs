@@ -15,6 +15,18 @@ public class EmprestimosController(IBibliotecaService bibliotecaService) : Contr
         return StatusCode(StatusCodes.Status201Created, emprestimo);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<EmprestimoResponseDto>>> Listar()
+    {
+        return Ok(await bibliotecaService.ListarEmprestimosAsync());
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<EmprestimoResponseDto>> ObterPorId(int id)
+    {
+        return Ok(await bibliotecaService.ObterEmprestimoPorIdAsync(id));
+    }
+
     [HttpPut("{id:int}/devolucao")]
     public async Task<ActionResult<EmprestimoResponseDto>> Devolver(int id)
     {

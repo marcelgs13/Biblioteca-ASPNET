@@ -26,4 +26,17 @@ public class AutoresController(IBibliotecaService bibliotecaService) : Controlle
     {
         return Ok(await bibliotecaService.ObterAutorPorIdAsync(id));
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<AutorResponseDto>> Atualizar(int id, AtualizarAutorDto dto)
+    {
+        return Ok(await bibliotecaService.AtualizarAutorAsync(id, dto));
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Excluir(int id)
+    {
+        await bibliotecaService.ExcluirAutorAsync(id);
+        return NoContent();
+    }
 }

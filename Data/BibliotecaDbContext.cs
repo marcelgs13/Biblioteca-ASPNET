@@ -17,12 +17,14 @@ public class BibliotecaDbContext(DbContextOptions<BibliotecaDbContext> options) 
         modelBuilder.Entity<Autor>()
             .HasMany(autor => autor.Livros)
             .WithOne(livro => livro.Autor)
-            .HasForeignKey(livro => livro.AutorId);
+            .HasForeignKey(livro => livro.AutorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Aluno>()
             .HasMany(aluno => aluno.Emprestimos)
             .WithOne(emprestimo => emprestimo.Aluno)
-            .HasForeignKey(emprestimo => emprestimo.AlunoId);
+            .HasForeignKey(emprestimo => emprestimo.AlunoId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Livro>()
             .HasMany(livro => livro.Emprestimos)

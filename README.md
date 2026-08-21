@@ -82,11 +82,18 @@ http://localhost:5293/swagger
 | `POST` | `/api/autores` | Cadastra um autor |
 | `GET` | `/api/autores` | Lista os autores |
 | `GET` | `/api/autores/{id}` | Consulta um autor por ID |
+| `PUT` | `/api/autores/{id}` | Atualiza completamente um autor |
+| `DELETE` | `/api/autores/{id}` | Exclui um autor sem livros vinculados |
 | `POST` | `/api/livros` | Cadastra um livro associado a um autor |
 | `GET` | `/api/livros` | Lista livros e aceita os filtros `titulo` e `autor` |
 | `GET` | `/api/livros/{id}` | Consulta um livro por ID |
 | `POST` | `/api/alunos` | Cadastra um aluno |
+| `GET` | `/api/alunos` | Lista os alunos |
+| `GET` | `/api/alunos/{id}` | Consulta um aluno por ID |
+| `DELETE` | `/api/alunos/{id}` | Exclui um aluno sem empréstimos vinculados |
 | `POST` | `/api/emprestimos` | Registra um empréstimo |
+| `GET` | `/api/emprestimos` | Lista os empréstimos |
+| `GET` | `/api/emprestimos/{id}` | Consulta um empréstimo por ID |
 | `PUT` | `/api/emprestimos/{id}/devolucao` | Registra a devolução de um empréstimo |
 
 Exemplos de filtros:
@@ -108,6 +115,7 @@ GET /api/livros?titulo=clean&autor=martin
 - O prazo de devolução é definido em sete dias a partir do empréstimo.
 - Ao devolver um livro, a quantidade disponível é incrementada em uma unidade.
 - Um empréstimo já devolvido não pode ser devolvido novamente.
+- Autores com livros e alunos com empréstimos não podem ser excluídos.
 
 ## Respostas HTTP
 

@@ -34,6 +34,33 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
         return MapearAutor(autor);
     }
 
+    public async Task<AutorResponseDto> AtualizarAutorAsync(int id, AtualizarAutorDto dto)
+    {
+        var autor = await repository.ObterAutorPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Autor não encontrado.");
+
+        autor.Nome = dto.Nome;
+        autor.DataNascimento = dto.DataNascimento;
+        autor.Nacionalidade = dto.Nacionalidade;
+
+        await repository.AtualizarAutorAsync(autor);
+        return MapearAutor(autor);
+    }
+
+    public async Task ExcluirAutorAsync(int id)
+    {
+        var autor = await repository.ObterAutorPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Autor não encontrado.");
+
+        if (await repository.AutorPossuiLivrosAsync(id))
+        {
+            throw new ConflitoNegocioException(
+                "Não é possível excluir o autor porque ele possui livros cadastrados.");
+        }
+
+        await repository.RemoverAutorAsync(autor);
+    }
+
     public async Task<LivroResponseDto> CriarLivroAsync(CriarLivroDto dto)
     {
         var autor = await repository.ObterAutorPorIdAsync(dto.AutorId)
@@ -92,13 +119,35 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
 
         await repository.AdicionarAlunoAsync(aluno);
 
-        return new AlunoResponseDto
+        return MapearAluno(aluno);
+    }
+
+    public async Task<List<AlunoResponseDto>> ListarAlunosAsync()
+    {
+        var alunos = await repository.ListarAlunosAsync();
+        return alunos.Select(MapearAluno).ToList();
+    }
+
+    public async Task<AlunoResponseDto> ObterAlunoPorIdAsync(int id)
+    {
+        var aluno = await repository.ObterAlunoPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Aluno não encontrado.");
+
+        return MapearAluno(aluno);
+    }
+
+    public async Task ExcluirAlunoAsync(int id)
+    {
+        var aluno = await repository.ObterAlunoPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Aluno não encontrado.");
+
+        if (await repository.AlunoPossuiEmprestimosAsync(id))
         {
-            Id = aluno.Id,
-            Nome = aluno.Nome,
-            Matricula = aluno.Matricula,
-            Email = aluno.Email
-        };
+            throw new ConflitoNegocioException(
+                "Não é possível excluir o aluno porque ele possui empréstimos cadastrados.");
+        }
+
+        await repository.RemoverAlunoAsync(aluno);
     }
 
     public async Task<EmprestimoResponseDto> CriarEmprestimoAsync(CriarEmprestimoDto dto)
@@ -133,6 +182,20 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
 
         livro.Quantidade--;
         await repository.AdicionarEmprestimoAsync(emprestimo);
+
+        return MapearEmprestimo(emprestimo);
+    }
+
+    public async Task<List<EmprestimoResponseDto>> ListarEmprestimosAsync()
+    {
+        var emprestimos = await repository.ListarEmprestimosAsync();
+        return emprestimos.Select(MapearEmprestimo).ToList();
+    }
+
+    public async Task<EmprestimoResponseDto> ObterEmprestimoPorIdAsync(int id)
+    {
+        var emprestimo = await repository.ObterEmprestimoPorIdAsync(id)
+            ?? throw new RecursoNaoEncontradoException("Empréstimo não encontrado.");
 
         return MapearEmprestimo(emprestimo);
     }
@@ -177,6 +240,17 @@ public class BibliotecaService(IBibliotecaRepository repository) : IBibliotecaSe
             Quantidade = livro.Quantidade,
             AutorId = livro.AutorId,
             AutorNome = livro.Autor.Nome
+        };
+    }
+
+    private static AlunoResponseDto MapearAluno(Aluno aluno)
+    {
+        return new AlunoResponseDto
+        {
+            Id = aluno.Id,
+            Nome = aluno.Nome,
+            Matricula = aluno.Matricula,
+            Email = aluno.Email
         };
     }
 

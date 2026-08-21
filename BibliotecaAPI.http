@@ -21,6 +21,17 @@ Accept: application/json
 
 ###
 
+PUT {{BibliotecaAPI_HostAddress}}/api/autores/1
+Content-Type: application/json
+
+{
+  "nome": "Robert C. Martin Atualizado",
+  "dataNascimento": "1952-12-05",
+  "nacionalidade": "Americana"
+}
+
+###
+
 POST {{BibliotecaAPI_HostAddress}}/api/livros
 Content-Type: application/json
 
@@ -55,6 +66,16 @@ Content-Type: application/json
 
 ###
 
+GET {{BibliotecaAPI_HostAddress}}/api/alunos
+Accept: application/json
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/alunos/1
+Accept: application/json
+
+###
+
 POST {{BibliotecaAPI_HostAddress}}/api/emprestimos
 Content-Type: application/json
 
@@ -65,7 +86,27 @@ Content-Type: application/json
 
 ###
 
+GET {{BibliotecaAPI_HostAddress}}/api/emprestimos
+Accept: application/json
+
+###
+
+GET {{BibliotecaAPI_HostAddress}}/api/emprestimos/1
+Accept: application/json
+
+###
+
 PUT {{BibliotecaAPI_HostAddress}}/api/emprestimos/1/devolucao
 Accept: application/json
+
+###
+
+# Retorna 409 enquanto o aluno possuir empréstimos cadastrados.
+DELETE {{BibliotecaAPI_HostAddress}}/api/alunos/1
+
+###
+
+# Retorna 409 enquanto o autor possuir livros cadastrados.
+DELETE {{BibliotecaAPI_HostAddress}}/api/autores/1
 
 ###
