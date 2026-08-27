@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  biblioteca-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Exemplo de Connection String ajustada para o container
+      # - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=BibliotecaDb;Username=postgres;Password=senha
+    # depends_on:
+    #   - db
+
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: senha
+  #     POSTGRES_DB: BibliotecaDb
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+# volumes:
+#   pgdata:
