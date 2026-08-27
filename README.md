@@ -11,6 +11,7 @@ API REST para gerenciamento de uma biblioteca, desenvolvida com ASP.NET Core. O 
 - OpenAPI 3.1 e Swagger UI
 - HTML, CSS e JavaScript no front-end
 - Git
+- Docker e Docker Compose
 
 ## Arquitetura
 
@@ -42,6 +43,7 @@ centralizada em `Services` e outra em `Repositories`.
 
 - [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0)
 - Git
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e em execução
 
 ## Como executar
 
@@ -51,6 +53,30 @@ Clone o repositório e entre na pasta do projeto:
 git clone https://github.com/marcelgs13/Biblioteca-ASPNET.git
 cd Biblioteca-ASPNET
 ```
+Opção 1: Executando via Docker Compose (Recomendado)
+
+Suba o container da API (as migrations do banco de dados são aplicadas automaticamente na inicialização):
+
+```powershell
+docker compose up --build -d
+```
+A API ficará disponível em http://localhost:8080. A interface Swagger pode ser acessada em:
+
+http://localhost:8080/swagger
+
+Para visualizar os logs da aplicação ou parar os containers:
+
+# Ver logs em tempo real
+```powershell
+docker compose logs -f
+```
+
+# Parar o container
+```powershell
+docker compose down
+```
+
+Opção 2: Executando Localmente (Sem Docker)
 
 Restaure as dependências e a ferramenta local do Entity Framework Core:
 
@@ -79,7 +105,7 @@ http://localhost:5293/swagger
 
 ### Executando o front-end
 
-Com a API em execução, abra o projeto no VS Code e instale a extensão recomendada
+Com a API em execução(via Docker ou localmente), abra o projeto no VS Code e instale a extensão recomendada
 **Live Server**. Clique com o botão direito em `front_end/index.html` e selecione
 **Open with Live Server**.
 
