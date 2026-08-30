@@ -42,8 +42,9 @@
                     <form id="student-form" class="form-stack">
                         <div class="field"><label for="nome">Nome completo</label><input id="nome" type="text" placeholder="Nome do aluno" required></div>
                         <div class="field"><label for="matricula">Matrícula</label><input id="matricula" type="text" placeholder="MAT-2026-000" required></div>
-                        <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="aluno@ifpe.edu.br" required><span class="field-hint">Use um endereço com domínio @gmail.com ou @ifpe.edu.br.</span></div>
+                        <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="aluno@ifpe.edu.br" pattern="^[^@\s]+@ifpe\.edu\.br$" title="Use um e-mail com domínio @ifpe.edu.br." required><span class="field-hint">Use obrigatoriamente um endereço com domínio @ifpe.edu.br.</span></div>
                         <p class="empty-note">Alunos com qualquer empréstimo cadastrado mantêm seu histórico e não podem ser excluídos.</p>
+                        <div class="field"><label for="senha">Senha inicial</label><input id="senha" type="password" minlength="8" required><span class="field-hint">Mínimo de 8 caracteres.</span></div>
                         <div class="form-actions"><button class="primary-action" type="submit">Cadastrar aluno</button><button id="clear-student-form" class="secondary-action" type="button">Limpar campos</button></div>
                     </form>
                 </aside>

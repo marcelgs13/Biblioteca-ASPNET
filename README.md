@@ -1,180 +1,118 @@
-# Biblioteca API
+# SmartLib — Biblioteca API
 
-API REST para gerenciamento de uma biblioteca, desenvolvida com ASP.NET Core. O projeto permite cadastrar e consultar autores, livros e alunos, além de controlar empréstimos, devoluções e a quantidade disponível de cada livro.
-
-## Tecnologias
-
-- C# e .NET 10
-- ASP.NET Core Web API
-- Entity Framework Core 10
-- SQLite
-- OpenAPI 3.1 e Swagger UI
-- HTML, CSS e JavaScript no front-end
-- Git
+Plataforma de gestão de biblioteca construída com ASP.NET Core. A aplicação controla catálogo, alunos, empréstimos, devoluções e solicitações de empréstimo, com autenticação JWT e autorização por perfil.
 
 ## Arquitetura
 
-O projeto separa as responsabilidades nas seguintes pastas:
-
-```text
-BibliotecaAPI/
-├── Controllers/    # Rotas e respostas HTTP
-├── Data/           # DbContext e mapeamento do EF Core
-├── DTOs/           # Contratos de entrada e saída da API
-├── Exceptions/     # Exceções e tratamento global com ProblemDetails
-├── Migrations/     # Histórico de evolução do banco de dados
-├── Models/         # Entidades de domínio
-├── Repositories/   # Acesso centralizado aos dados por interface
-├── Services/       # Regras de negócio centralizadas por interface
-└── front_end/      # Interface web que consome a API
+```mermaid
+flowchart LR
+    F[Frontend HTML/CSS/JS] -->|JSON + JWT| C[Controllers ASP.NET Core]
+    C --> S[Services: regras de negócio]
+    S --> R[Repository: acesso a dados]
+    R --> D[EF Core DbContext]
+    D --> DB[(SQLite)]
 ```
 
-O fluxo principal de uma requisição é:
+O projeto usa `Models` para as entidades, `DTOs` para contratos HTTP, `Controllers` para as rotas, `Services` para regras, `Repositories` para persistência, `Data` para EF Core/SQLite, `Exceptions` para `ProblemDetails` e `Migrations` para versionar o esquema.
 
-```text
-Cliente → Controller → Service → Repository → DbContext → SQLite
-```
+## Tecnologias
 
-Para facilitar a leitura do fluxo, o projeto utiliza uma interface e uma implementação
-centralizada em `Services` e outra em `Repositories`.
+- .NET 10, C# e ASP.NET Core Web API
+- Entity Framework Core 10 e SQLite
+- JWT Bearer, RBAC e hash de senhas
+- OpenAPI 3.1 e Swagger UI
+- HTML, CSS e JavaScript com Fetch API
 
-## Pré-requisitos
+## Execução local
 
-- [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0)
-- Git
-
-## Como executar
-
-Clone o repositório e entre na pasta do projeto:
+Pré-requisitos: .NET SDK 10, Git e a extensão Live Server do VS Code.
 
 ```powershell
 git clone https://github.com/marcelgs13/Biblioteca-ASPNET.git
 cd Biblioteca-ASPNET
-```
-
-Restaure as dependências e a ferramenta local do Entity Framework Core:
-
-```powershell
 dotnet restore
 dotnet tool restore
-```
-
-Crie ou atualize o banco SQLite usando as migrations:
-
-```powershell
 dotnet tool run dotnet-ef database update
-```
-
-Inicie a aplicação com o perfil HTTP:
-
-```powershell
 dotnet run --launch-profile http
 ```
 
-A API ficará disponível em `http://localhost:5293`. A interface Swagger pode ser acessada em:
+A API usa `http://localhost:5293`; o Swagger fica em `http://localhost:5293/swagger` e o health check em `http://localhost:5293/health`.
 
-```text
-http://localhost:5293/swagger
-```
+Para o front-end, clique com o botão direito em `front_end/login.html`, escolha **Open with Live Server** e acesse `http://127.0.0.1:5500/front_end/login.html`.
 
-### Executando o front-end
+## Contas de desenvolvimento
 
-Com a API em execução, abra o projeto no VS Code e instale a extensão recomendada
-**Live Server**. Clique com o botão direito em `front_end/index.html` e selecione
-**Open with Live Server**.
+As contas abaixo são criadas automaticamente em `Development`. As senhas são armazenadas somente como hash.
 
-O projeto configura o Live Server na porta `5500`. A interface ficará disponível em:
+| Perfil | E-mail | Senha |
+|---|---|---|
+| ADMIN | `admin@ifpe.edu.br` | `Admin@123` |
+| BIBLIOTECARIO | `bibliotecario@ifpe.edu.br` | `Biblio@123` |
+| ALUNO | `aluno@ifpe.edu.br` | `Aluno@123` |
 
-```text
-http://127.0.0.1:5500/front_end/index.html
-```
+A migration `DadosDemonstracao` também cria um acervo inicial com autores, livros e empréstimos associados ao aluno de teste. Isso permite explorar dashboards, multas, histórico e relatórios logo após a primeira execução.
 
-O front-end e a API são executados separadamente. A política CORS aceita o Live
-Server por `127.0.0.1:5500` e `localhost:5500`.
+O ADMIN possui uma dashboard analítica, acesso total e cadastro de bibliotecários; o BIBLIOTECARIO gerencia acervo, alunos e aprova ou rejeita solicitações; o ALUNO consulta o catálogo, solicita empréstimos, vê o próprio histórico e lê suas notificações.
+
+## Variáveis e configurações
+
+| Chave | Finalidade | Padrão local |
+|---|---|---|
+| `ConnectionStrings__DefaultConnection` | Conexão com o banco | `Data Source=biblioteca.db` |
+| `Jwt__Key` | Chave de assinatura do token | Definida em `appsettings.json` para Development |
+| `Jwt__Issuer` | Emissor do JWT | `BibliotecaAPI` |
+| `Jwt__Audience` | Público do JWT | `SmartLibFrontend` |
+| `Jwt__ExpirationMinutes` | Validade do token | `120` |
+
+Em produção, forneça uma chave JWT forte por variável de ambiente e não versione segredos.
 
 ## Endpoints
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| `POST` | `/api/autores` | Cadastra um autor |
-| `GET` | `/api/autores` | Lista os autores |
-| `GET` | `/api/autores/{id}` | Consulta um autor por ID |
-| `PUT` | `/api/autores/{id}` | Atualiza completamente um autor |
-| `DELETE` | `/api/autores/{id}` | Exclui um autor sem livros vinculados |
-| `POST` | `/api/livros` | Cadastra um livro associado a um autor |
-| `GET` | `/api/livros` | Lista livros e aceita os filtros `titulo` e `autor` |
-| `GET` | `/api/livros/{id}` | Consulta um livro por ID |
-| `PUT` | `/api/livros/{id}` | Atualiza os dados e a quantidade disponível do livro |
-| `POST` | `/api/alunos` | Cadastra um aluno |
-| `GET` | `/api/alunos` | Lista os alunos |
-| `GET` | `/api/alunos/{id}` | Consulta um aluno por ID |
-| `DELETE` | `/api/alunos/{id}` | Exclui um aluno sem empréstimos vinculados |
-| `POST` | `/api/emprestimos` | Registra um empréstimo |
-| `GET` | `/api/emprestimos` | Lista os empréstimos |
-| `GET` | `/api/emprestimos/{id}` | Consulta um empréstimo por ID |
-| `PUT` | `/api/emprestimos/{id}/devolucao` | Registra a devolução de um empréstimo |
+| Método | Endpoint | Acesso | Descrição |
+|---|---|---|---|
+| POST | `/api/auth/login` | Público | Autentica e devolve o JWT |
+| GET | `/api/usuarios/total` | ADMIN | Retorna o total de contas com acesso ao sistema |
+| GET | `/api/usuarios/bibliotecarios` | ADMIN | Lista as contas de bibliotecários |
+| POST | `/api/usuarios/bibliotecarios` | ADMIN | Cadastra uma conta de bibliotecário |
+| GET | `/api/relatorios/livros-mais-emprestados` | ADMIN | Classifica os livros pelo total de empréstimos |
+| GET | `/api/relatorios/usuarios-inadimplentes` | ADMIN | Lista alunos com empréstimos atrasados e suas multas |
+| GET | `/api/relatorios/historico?dataInicio=&dataFim=` | ADMIN | Consulta o histórico em um período inclusivo |
+| GET | `/api/auditoria?page=1&pageSize=20` | ADMIN | Lista ações de alteração com usuário, ação e horário |
+| GET | `/health` | Público | Verifica API e conexão SQLite |
+| GET | `/api/autores` | Autenticado | Lista autores |
+| GET | `/api/autores/{id}` | Autenticado | Obtém autor |
+| POST/PUT/DELETE | `/api/autores...` | ADMIN/BIBLIOTECARIO | Gerencia autores |
+| GET | `/api/livros?termo=&page=1&pageSize=10` | Autenticado | Busca e pagina o catálogo |
+| GET | `/api/livros/{id}` | Autenticado | Obtém livro |
+| POST/PUT/DELETE | `/api/livros...` | ADMIN/BIBLIOTECARIO | CRUD do acervo |
+| GET/POST/DELETE | `/api/alunos...` | ADMIN/BIBLIOTECARIO | Gerencia alunos e suas contas |
+| GET | `/api/emprestimos` | Autenticado | Equipe vê todos; aluno vê os próprios |
+| GET | `/api/emprestimos/{id}` | Autenticado | Consulta empréstimo respeitando o perfil |
+| POST | `/api/emprestimos` | ADMIN/BIBLIOTECARIO | Registra empréstimo |
+| PUT | `/api/emprestimos/{id}/devolucao` | ADMIN/BIBLIOTECARIO | Registra devolução |
+| POST | `/api/reservas` | ALUNO | Solicita o empréstimo de um livro |
+| GET | `/api/reservas` | Autenticado | Equipe vê todas; aluno vê as próprias |
+| PUT | `/api/reservas/{id}/aprovar` | ADMIN/BIBLIOTECARIO | Aprova e cria o empréstimo |
+| PUT | `/api/reservas/{id}/rejeitar` | ADMIN/BIBLIOTECARIO | Rejeita uma solicitação aberta |
+| PUT | `/api/reservas/{id}/cancelar` | ALUNO | Cancela uma solicitação própria |
+| GET | `/api/notificacoes` | ALUNO | Lista notificações do aluno autenticado |
 
-Exemplos de filtros:
+## Regras principais
 
-```http
-GET /api/livros?titulo=clean
-GET /api/livros?autor=martin
-GET /api/livros?titulo=clean&autor=martin
-```
-
-## Regras de negócio
-
-- A matrícula do aluno deve ser única.
-- O e-mail do aluno deve ser único e é armazenado em letras minúsculas.
-- Recomenda-se o e-mail institucional `@ifpe.edu.br`, mas outros domínios válidos são aceitos.
-- Não é permitido cadastrar dois livros com o mesmo ISBN.
-- O autor informado no cadastro de um livro deve existir.
-- O aluno e o livro informados em um empréstimo devem existir.
-- Um livro sem exemplares disponíveis não pode ser emprestado.
-- Um aluno não pode manter dois empréstimos ativos do mesmo livro.
-- Ao emprestar um livro, a quantidade disponível é reduzida em uma unidade.
-- O prazo de devolução é definido em sete dias a partir do empréstimo.
-- Ao devolver um livro, a quantidade disponível é incrementada em uma unidade.
-- A atualização de um livro substitui a quantidade disponível pelo valor informado.
-- Um empréstimo já devolvido não pode ser devolvido novamente.
-- Autores com livros e alunos com empréstimos não podem ser excluídos.
-
-## Respostas HTTP
-
-| Código | Uso |
-|---|---|
-| `200 OK` | Consultas e devoluções realizadas com sucesso |
-| `201 Created` | Cadastros realizados com sucesso |
-| `400 Bad Request` | Dados de entrada inválidos |
-| `404 Not Found` | Autor, livro, aluno ou empréstimo inexistente |
-| `409 Conflict` | Violação de regra de negócio |
-| `500 Internal Server Error` | Erro inesperado no servidor |
-
-Erros de negócio e recursos inexistentes são retornados no padrão `ProblemDetails`. Validações de entrada utilizam `ValidationProblemDetails`.
-
-## Banco de dados
-
-O arquivo `biblioteca.db` é criado localmente pelo comando de migrations e não é versionado. Cada ambiente possui seu próprio banco e seus próprios dados.
-
-O repositório contém a migration inicial necessária para criar as tabelas, chaves estrangeiras e o índice único de matrícula.
-
-Ao atualizar um banco criado antes da migration `UniqueAlunoEmail`, corrija eventuais
-e-mails duplicados ou recrie o banco local antes de aplicar as migrations.
+- O livro possui ISBN, título, descrição, ano, editora, categoria, autor, quantidade e localização; ISBN é único.
+- A busca usa `termo`, e a listagem exige paginação com `pageSize` máximo de 100.
+- Matrícula e e-mail do aluno são únicos; cada aluno cadastrado recebe uma conta com a senha informada.
+- Somente o ADMIN pode listar e cadastrar bibliotecários; as senhas são armazenadas como hash e nunca retornam pela API.
+- O empréstimo dura sete dias, reduz o estoque e não pode ser duplicado enquanto estiver aberto.
+- Empréstimos vencidos passam para `Atrasado`; a multa é calculada em R$ 2,00 por dia.
+- Livros com estoque geram uma solicitação `AguardandoAprovacao`; sem estoque, entram em `AguardandoDisponibilidade` por ordem cronológica.
+- A aprovação cria o empréstimo e reduz o estoque; rejeição e cancelamento liberam a vaga para a próxima solicitação.
+- Ao surgir disponibilidade, a próxima solicitação da fila aguarda aprovação e gera uma notificação persistida.
+- Recursos relacionados não são excluídos, preservando o histórico.
+- Operações `POST`, `PUT` e `DELETE` concluídas com sucesso geram auditoria persistida; somente o ADMIN consulta esses registros.
 
 ## Testes manuais
 
-As operações podem ser testadas de duas formas:
+Use o front-end, o Swagger (botão **Authorize**, com o JWT do login) ou `BibliotecaAPI.http`. Valide login, `401` sem token, `403` por perfil, busca/paginação, CRUD do livro, solicitação, aprovação/rejeição, atraso/multa, devolução, fila, notificação, relatórios administrativos, auditoria e `/health`.
 
-- Pela interface web em `http://127.0.0.1:5500/front_end/index.html`.
-- Pela interface Swagger em `http://localhost:5293/swagger`.
-- Pelo arquivo `BibliotecaAPI.http`, usando um cliente HTTP compatível no editor.
-
-Para testar o fluxo completo, cadastre os recursos nesta ordem:
-
-1. Autor.
-2. Livro usando o ID do autor.
-3. Aluno.
-4. Empréstimo usando os IDs do aluno e do livro.
-5. Devolução usando o ID do empréstimo.
-
-Os desafios bônus de paginação, autenticação JWT, busca avançada e testes unitários não fazem parte do escopo desta versão.
+Docker, Redis e projetos automatizados de teste estão fora desta etapa e serão tratados em fases posteriores.

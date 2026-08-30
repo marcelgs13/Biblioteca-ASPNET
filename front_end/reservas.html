@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Solicitações de empréstimo da Biblioteca API">
+    <title>Solicitações | Biblioteca API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="reservas">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html" aria-label="Biblioteca API - início">
+                <span class="brand-mark" aria-hidden="true">B</span>
+                <span><span class="brand-name">Biblioteca API</span><span class="brand-subtitle">Gestão de acervo</span></span>
+            </a>
+            <p class="nav-label">Navegação</p>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a class="nav-link" href="index.html"><span class="nav-index">01</span>Visão geral</a>
+                <a class="nav-link" href="livros.html"><span class="nav-index">02</span>Livros</a>
+                <a class="nav-link" href="autores.html"><span class="nav-index">03</span>Autores</a>
+                <a class="nav-link" href="alunos.html"><span class="nav-index">04</span>Alunos</a>
+                <a class="nav-link" href="emprestimos.html"><span class="nav-index">05</span>Empréstimos</a>
+            </nav>
+            <div class="sidebar-footer"></div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topline"><span class="breadcrumb">Painel / Solicitações</span><span class="demo-label"><span class="demo-dot"></span>API conectada</span></div>
+            <header class="page-header">
+                <div><p class="eyebrow">Circulação</p><h1 class="page-title">Solicitações</h1><p class="page-description">Acompanhe pedidos de empréstimo, aprovações e a fila de disponibilidade.</p></div>
+            </header>
+            <section class="content-grid">
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Solicitações registradas</h2><p class="panel-subtitle">Acompanhe a ordem e a situação de cada pedido.</p></div></div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Aluno</th><th>Livro</th><th>Data</th><th>Status</th><th>Fila</th><th>Ações</th></tr></thead>
+                            <tbody id="reservations-body"><tr><td colspan="6" class="table-message">Carregando dados...</td></tr></tbody>
+                        </table>
+                    </div>
+                </article>
+                <aside id="reservation-form-panel" class="form-panel" hidden>
+                    <h2 class="form-title">Solicitar empréstimo</h2>
+                    <p class="form-description">Livros disponíveis aguardam aprovação; os demais entram na fila automaticamente.</p>
+                    <form id="reservation-form" class="form-stack">
+                        <div class="field"><label for="reserva-livro">Livro</label><select id="reserva-livro" required><option value="">Carregando livros...</option></select></div>
+                        <button class="primary-action" type="submit">Enviar solicitação</button>
+                    </form>
+                </aside>
+            </section>
+            <footer class="page-footer">As solicitações são carregadas diretamente da Biblioteca API.</footer>
+        </main>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>

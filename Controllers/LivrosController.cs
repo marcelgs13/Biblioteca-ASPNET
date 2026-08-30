@@ -1,13 +1,16 @@
 using BibliotecaAPI.DTOs;
 using BibliotecaAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class LivrosController(IBibliotecaService bibliotecaService) : ControllerBase
 {
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
     [HttpPost]
     public async Task<ActionResult<LivroResponseDto>> Criar(CriarLivroDto dto)
     {
@@ -16,11 +19,9 @@ public class LivrosController(IBibliotecaService bibliotecaService) : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<LivroResponseDto>>> Listar(
-        [FromQuery] string? titulo,
-        [FromQuery] string? autor)
+    public async Task<ActionResult<PagedResponseDto<LivroResponseDto>>> Listar([FromQuery] LivroQueryDto query)
     {
-        return Ok(await bibliotecaService.ListarLivrosAsync(titulo, autor));
+        return Ok(await bibliotecaService.ListarLivrosAsync(query));
     }
 
     [HttpGet("{id:int}")]
@@ -29,9 +30,18 @@ public class LivrosController(IBibliotecaService bibliotecaService) : Controller
         return Ok(await bibliotecaService.ObterLivroPorIdAsync(id));
     }
 
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
     [HttpPut("{id:int}")]
     public async Task<ActionResult<LivroResponseDto>> Atualizar(int id, AtualizarLivroDto dto)
     {
         return Ok(await bibliotecaService.AtualizarLivroAsync(id, dto));
+    }
+
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Excluir(int id)
+    {
+        await bibliotecaService.ExcluirLivroAsync(id);
+        return NoContent();
     }
 }

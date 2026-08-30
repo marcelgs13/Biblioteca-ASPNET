@@ -1,13 +1,16 @@
 using BibliotecaAPI.DTOs;
 using BibliotecaAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AutoresController(IBibliotecaService bibliotecaService) : ControllerBase
 {
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
     [HttpPost]
     public async Task<ActionResult<AutorResponseDto>> Criar(CriarAutorDto dto)
     {
@@ -27,12 +30,14 @@ public class AutoresController(IBibliotecaService bibliotecaService) : Controlle
         return Ok(await bibliotecaService.ObterAutorPorIdAsync(id));
     }
 
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
     [HttpPut("{id:int}")]
     public async Task<ActionResult<AutorResponseDto>> Atualizar(int id, AtualizarAutorDto dto)
     {
         return Ok(await bibliotecaService.AtualizarAutorAsync(id, dto));
     }
 
+    [Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Excluir(int id)
     {

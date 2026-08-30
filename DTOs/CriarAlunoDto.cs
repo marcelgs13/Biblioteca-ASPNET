@@ -19,4 +19,8 @@ public class CriarAlunoDto
         get => _email;
         set => _email = value?.Trim() ?? string.Empty;
     }
+
+    [Required]
+    [MinLength(8)]
+    public string Senha { get; set; } = string.Empty;
 }

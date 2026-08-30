@@ -46,6 +46,41 @@ namespace BibliotecaAPI.Migrations
                     b.ToTable("Alunos");
                 });
 
+            modelBuilder.Entity("BibliotecaAPI.Models.Auditoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Acao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Detalhes")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Perfil")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UsuarioNome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Data");
+
+                    b.ToTable("Auditorias");
+                });
+
             modelBuilder.Entity("BibliotecaAPI.Models.Autor", b =>
                 {
                     b.Property<int>("Id")
@@ -113,7 +148,23 @@ namespace BibliotecaAPI.Migrations
                     b.Property<int>("AutorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Categoria")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Editora")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Localizacao")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -128,7 +179,99 @@ namespace BibliotecaAPI.Migrations
 
                     b.HasIndex("AutorId");
 
+                    b.HasIndex("ISBN")
+                        .IsUnique();
+
                     b.ToTable("Livros");
+                });
+
+            modelBuilder.Entity("BibliotecaAPI.Models.Notificacao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AlunoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mensagem")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlunoId");
+
+                    b.ToTable("Notificacoes");
+                });
+
+            modelBuilder.Entity("BibliotecaAPI.Models.Reserva", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AlunoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DataReserva")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LivroId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlunoId");
+
+                    b.HasIndex("LivroId", "DataReserva");
+
+                    b.ToTable("Reservas");
+                });
+
+            modelBuilder.Entity("BibliotecaAPI.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AlunoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Perfil")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlunoId")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("BibliotecaAPI.Models.Emprestimo", b =>
@@ -142,7 +285,7 @@ namespace BibliotecaAPI.Migrations
                     b.HasOne("BibliotecaAPI.Models.Livro", "Livro")
                         .WithMany("Emprestimos")
                         .HasForeignKey("LivroId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Aluno");
@@ -161,9 +304,55 @@ namespace BibliotecaAPI.Migrations
                     b.Navigation("Autor");
                 });
 
+            modelBuilder.Entity("BibliotecaAPI.Models.Notificacao", b =>
+                {
+                    b.HasOne("BibliotecaAPI.Models.Aluno", "Aluno")
+                        .WithMany("Notificacoes")
+                        .HasForeignKey("AlunoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Aluno");
+                });
+
+            modelBuilder.Entity("BibliotecaAPI.Models.Reserva", b =>
+                {
+                    b.HasOne("BibliotecaAPI.Models.Aluno", "Aluno")
+                        .WithMany("Reservas")
+                        .HasForeignKey("AlunoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BibliotecaAPI.Models.Livro", "Livro")
+                        .WithMany("Reservas")
+                        .HasForeignKey("LivroId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Aluno");
+
+                    b.Navigation("Livro");
+                });
+
+            modelBuilder.Entity("BibliotecaAPI.Models.Usuario", b =>
+                {
+                    b.HasOne("BibliotecaAPI.Models.Aluno", "Aluno")
+                        .WithOne("Usuario")
+                        .HasForeignKey("BibliotecaAPI.Models.Usuario", "AlunoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Aluno");
+                });
+
             modelBuilder.Entity("BibliotecaAPI.Models.Aluno", b =>
                 {
                     b.Navigation("Emprestimos");
+
+                    b.Navigation("Notificacoes");
+
+                    b.Navigation("Reservas");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("BibliotecaAPI.Models.Autor", b =>
@@ -174,6 +363,8 @@ namespace BibliotecaAPI.Migrations
             modelBuilder.Entity("BibliotecaAPI.Models.Livro", b =>
                 {
                     b.Navigation("Emprestimos");
+
+                    b.Navigation("Reservas");
                 });
 #pragma warning restore 612, 618
         }

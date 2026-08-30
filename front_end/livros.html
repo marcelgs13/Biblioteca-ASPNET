@@ -43,6 +43,7 @@
                             <tbody id="books-body"><tr><td colspan="5" class="table-message">Carregando dados...</td></tr></tbody>
                         </table>
                     </div>
+                    <div id="book-pagination" class="pagination" aria-label="Paginação do acervo"></div>
                 </article>
 
                 <aside class="form-panel">
@@ -51,7 +52,11 @@
                     <form id="book-form" class="form-stack">
                         <div class="field"><label for="titulo">Título</label><input id="titulo" type="text" placeholder="Nome do livro" required></div>
                         <div class="field"><label for="isbn">ISBN</label><input id="isbn" type="text" placeholder="9780000000000" required></div>
+                        <div class="field"><label for="descricao">Descrição</label><textarea id="descricao" rows="3" required></textarea></div>
                         <div class="field"><label for="autor">Autor</label><select id="autor" required><option value="">Carregando autores...</option></select></div>
+                        <div class="field"><label for="editora">Editora</label><input id="editora" type="text" required></div>
+                        <div class="field"><label for="categoria">Categoria</label><input id="categoria" type="text" required></div>
+                        <div class="field"><label for="localizacao">Localização</label><input id="localizacao" type="text" placeholder="Estante A - Prateleira 2" required></div>
                         <div class="form-row">
                             <div class="field"><label for="ano">Ano</label><input id="ano" type="number" min="1" placeholder="2026" required></div>
                             <div class="field"><label for="quantidade">Quantidade</label><input id="quantidade" type="number" min="0" placeholder="1" required></div>

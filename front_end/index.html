@@ -37,48 +37,75 @@
                     <h1 class="page-title">Um acervo vivo,<br>organizado em detalhes.</h1>
                     <p class="page-description">Acompanhe o catálogo, a circulação de exemplares e os principais alertas da biblioteca em um só lugar.</p>
                 </div>
-                <a class="primary-action" href="emprestimos.html">Novo empréstimo</a>
+                <a id="dashboard-primary-action" class="primary-action" href="emprestimos.html">Novo empréstimo</a>
             </header>
 
             <section class="metric-grid" aria-label="Indicadores da biblioteca">
                 <article class="metric-card">
-                    <div class="metric-top"><span class="metric-label">Livros cadastrados</span><span class="metric-code">AC</span></div>
+                    <div class="metric-top"><span class="metric-label">Livros cadastrados</span></div>
                     <strong id="metric-livros" class="metric-value">—</strong>
                     <span class="metric-note">Títulos disponíveis no catálogo</span>
                 </article>
-                <article class="metric-card">
-                    <div class="metric-top"><span class="metric-label">Alunos cadastrados</span><span class="metric-code">AL</span></div>
+                <article id="metric-secondary-card" class="metric-card">
+                    <div class="metric-top"><span id="metric-secondary-label" class="metric-label">Alunos cadastrados</span></div>
                     <strong id="metric-alunos" class="metric-value">—</strong>
-                    <span class="metric-note">Cadastros presentes no banco</span>
+                    <span id="metric-secondary-note" class="metric-note">Cadastros presentes no banco</span>
                 </article>
                 <article class="metric-card">
-                    <div class="metric-top"><span class="metric-label">Empréstimos ativos</span><span class="metric-code">EM</span></div>
+                    <div class="metric-top"><span class="metric-label">Empréstimos ativos</span></div>
                     <strong id="metric-ativos" class="metric-value">—</strong>
                     <span class="metric-note">Prazo padrão de <strong>7 dias</strong></span>
                 </article>
                 <article class="metric-card">
-                    <div class="metric-top"><span class="metric-label">Em atraso</span><span class="metric-code">AT</span></div>
+                    <div class="metric-top"><span class="metric-label">Em atraso</span></div>
                     <strong id="metric-atrasados" class="metric-value">—</strong>
                     <span class="metric-note">Necessitam acompanhamento</span>
+                </article>
+            </section>
+
+            <section id="admin-analytics" class="analytics-grid" aria-label="Indicadores analíticos" hidden>
+                <article class="panel analytics-panel">
+                    <div class="panel-header">
+                        <div><h2 class="panel-title">Livros mais emprestados</h2><p class="panel-subtitle">Quantidade de empréstimos por título</p></div>
+                    </div>
+                    <div id="chart-popular-books" class="chart-list panel-body"><p class="chart-empty">Carregando indicadores...</p></div>
+                </article>
+                <article class="panel analytics-panel">
+                    <div class="panel-header">
+                        <div><h2 class="panel-title">Distribuição por categoria</h2><p class="panel-subtitle">Composição atual do catálogo</p></div>
+                    </div>
+                    <div id="chart-categories" class="chart-list panel-body"><p class="chart-empty">Carregando indicadores...</p></div>
+                </article>
+                <article class="panel analytics-panel">
+                    <div class="panel-header">
+                        <div><h2 class="panel-title">Empréstimos por mês</h2><p class="panel-subtitle">Movimentação dos últimos seis meses</p></div>
+                    </div>
+                    <div id="chart-monthly-loans" class="chart-list panel-body"><p class="chart-empty">Carregando indicadores...</p></div>
+                </article>
+                <article class="panel analytics-panel">
+                    <div class="panel-header">
+                        <div><h2 class="panel-title">Situação dos prazos</h2><p class="panel-subtitle">Visão resumida de atrasos e devoluções</p></div>
+                    </div>
+                    <div id="chart-deadlines" class="chart-list panel-body"><p class="chart-empty">Carregando indicadores...</p></div>
                 </article>
             </section>
 
             <section class="dashboard-grid">
                 <article class="panel">
                     <div class="panel-header">
-                        <div><h2 class="panel-title">Movimentações recentes</h2><p class="panel-subtitle">Últimos empréstimos registrados</p></div>
+                        <div><h2 id="recent-panel-title" class="panel-title">Movimentações recentes</h2><p id="recent-panel-subtitle" class="panel-subtitle">Últimos empréstimos registrados</p></div>
                         <a class="text-action" href="emprestimos.html">Ver todos</a>
                     </div>
                     <div class="table-wrap">
                         <table class="data-table">
-                            <thead><tr><th>Aluno</th><th>Livro</th><th>Previsão</th><th>Status</th></tr></thead>
+                            <thead><tr><th id="recent-student-column">Aluno</th><th>Livro</th><th>Previsão</th><th>Status</th></tr></thead>
                             <tbody id="recent-loans-body"><tr><td colspan="4" class="table-message">Carregando dados...</td></tr></tbody>
                         </table>
                     </div>
                 </article>
 
                 <aside class="panel">
-                    <div class="panel-header"><div><h2 class="panel-title">Estoque reduzido</h2><p class="panel-subtitle">Exemplares que exigem atenção</p></div></div>
+                    <div class="panel-header"><div><h2 id="catalog-panel-title" class="panel-title">Estoque reduzido</h2><p id="catalog-panel-subtitle" class="panel-subtitle">Exemplares que exigem atenção</p></div></div>
                     <div class="panel-body">
                         <ul id="low-stock-list" class="stock-list"><li class="table-message">Carregando estoque...</li></ul>
                         <div class="quick-links">

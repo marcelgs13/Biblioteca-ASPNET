@@ -1,6 +1,56 @@
-@BibliotecaAPI_HostAddress = http://localhost:5293
+@host = http://localhost:5293
+@token = cole_o_token_aqui
 
-POST {{BibliotecaAPI_HostAddress}}/api/autores
+### Login ADMIN
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ifpe.edu.br",
+  "senha": "Admin@123"
+}
+
+### Health check
+GET {{host}}/health
+
+### Listar bibliotecários (token ADMIN)
+GET {{host}}/api/usuarios/bibliotecarios
+Authorization: Bearer {{token}}
+
+### Total de usuários (token ADMIN)
+GET {{host}}/api/usuarios/total
+Authorization: Bearer {{token}}
+
+### Relatório de livros mais emprestados (token ADMIN)
+GET {{host}}/api/relatorios/livros-mais-emprestados
+Authorization: Bearer {{token}}
+
+### Relatório de usuários inadimplentes (token ADMIN)
+GET {{host}}/api/relatorios/usuarios-inadimplentes
+Authorization: Bearer {{token}}
+
+### Relatório de histórico por período inclusivo (token ADMIN)
+GET {{host}}/api/relatorios/historico?dataInicio=2026-08-01&dataFim=2026-08-31
+Authorization: Bearer {{token}}
+
+### Auditoria paginada (token ADMIN)
+GET {{host}}/api/auditoria?page=1&pageSize=20
+Authorization: Bearer {{token}}
+
+### Cadastrar bibliotecário (token ADMIN)
+POST {{host}}/api/usuarios/bibliotecarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Maria Bibliotecária",
+  "email": "maria.biblioteca@ifpe.edu.br",
+  "senha": "Biblioteca@123"
+}
+
+### Criar autor
+POST {{host}}/api/autores
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -9,87 +59,42 @@ Content-Type: application/json
   "nacionalidade": "Americana"
 }
 
-###
-
-GET {{BibliotecaAPI_HostAddress}}/api/autores
-Accept: application/json
-
-###
-
-GET {{BibliotecaAPI_HostAddress}}/api/autores/1
-Accept: application/json
-
-###
-
-PUT {{BibliotecaAPI_HostAddress}}/api/autores/1
-Content-Type: application/json
-
-{
-  "nome": "Robert C. Martin Atualizado",
-  "dataNascimento": "1952-12-05",
-  "nacionalidade": "Americana"
-}
-
-###
-
-POST {{BibliotecaAPI_HostAddress}}/api/livros
+### Criar livro com os nove campos
+POST {{host}}/api/livros
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "isbn": "9780132350884",
   "titulo": "Clean Code",
+  "descricao": "Práticas para escrever código limpo.",
   "anoPublicacao": 2008,
-  "quantidade": 3,
+  "editora": "Prentice Hall",
+  "categoria": "Tecnologia",
+  "quantidade": 1,
+  "localizacao": "Estante A - Prateleira 1",
   "autorId": 1
 }
 
-###
+### Busca paginada
+GET {{host}}/api/livros?termo=clean&page=1&pageSize=10
+Authorization: Bearer {{token}}
 
-GET {{BibliotecaAPI_HostAddress}}/api/livros?titulo=clean&autor=martin
-Accept: application/json
-
-###
-
-GET {{BibliotecaAPI_HostAddress}}/api/livros/1
-Accept: application/json
-
-###
-
-PUT {{BibliotecaAPI_HostAddress}}/api/livros/1
-Content-Type: application/json
-
-{
-  "isbn": "9780132350884",
-  "titulo": "Clean Code Atualizado",
-  "anoPublicacao": 2008,
-  "quantidade": 5,
-  "autorId": 1
-}
-
-###
-
-POST {{BibliotecaAPI_HostAddress}}/api/alunos
+### Criar aluno e conta
+POST {{host}}/api/alunos
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "nome": "João Silva",
   "matricula": "2026001",
-  "email": "joao@ifpe.edu.br"
+  "email": "joao@ifpe.edu.br",
+  "senha": "Aluno@123"
 }
 
-###
-
-GET {{BibliotecaAPI_HostAddress}}/api/alunos
-Accept: application/json
-
-###
-
-GET {{BibliotecaAPI_HostAddress}}/api/alunos/1
-Accept: application/json
-
-###
-
-POST {{BibliotecaAPI_HostAddress}}/api/emprestimos
+### Empréstimo
+POST {{host}}/api/emprestimos
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -97,29 +102,35 @@ Content-Type: application/json
   "livroId": 1
 }
 
-###
+### Devolução
+PUT {{host}}/api/emprestimos/1/devolucao
+Authorization: Bearer {{token}}
 
-GET {{BibliotecaAPI_HostAddress}}/api/emprestimos
-Accept: application/json
+### Solicitar empréstimo (token ALUNO)
+POST {{host}}/api/reservas
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
-###
+{
+  "livroId": 1
+}
 
-GET {{BibliotecaAPI_HostAddress}}/api/emprestimos/1
-Accept: application/json
+### Solicitações visíveis ao perfil autenticado
+GET {{host}}/api/reservas
+Authorization: Bearer {{token}}
 
-###
+### Aprovar solicitação (token ADMIN ou BIBLIOTECARIO)
+PUT {{host}}/api/reservas/1/aprovar
+Authorization: Bearer {{token}}
 
-PUT {{BibliotecaAPI_HostAddress}}/api/emprestimos/1/devolucao
-Accept: application/json
+### Rejeitar solicitação (token ADMIN ou BIBLIOTECARIO)
+PUT {{host}}/api/reservas/1/rejeitar
+Authorization: Bearer {{token}}
 
-###
+### Cancelar solicitação própria (token ALUNO)
+PUT {{host}}/api/reservas/1/cancelar
+Authorization: Bearer {{token}}
 
-# Retorna 409 enquanto o aluno possuir empréstimos cadastrados.
-DELETE {{BibliotecaAPI_HostAddress}}/api/alunos/1
-
-###
-
-# Retorna 409 enquanto o autor possuir livros cadastrados.
-DELETE {{BibliotecaAPI_HostAddress}}/api/autores/1
-
-###
+### Notificações (token ALUNO)
+GET {{host}}/api/notificacoes
+Authorization: Bearer {{token}}

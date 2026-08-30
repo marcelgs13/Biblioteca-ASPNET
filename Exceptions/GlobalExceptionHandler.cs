@@ -14,6 +14,10 @@ public sealed class GlobalExceptionHandler(
     {
         var (status, title, detail) = exception switch
         {
+            CredenciaisInvalidasException => (
+                StatusCodes.Status401Unauthorized,
+                "Não autorizado",
+                exception.Message),
             RecursoNaoEncontradoException => (
                 StatusCodes.Status404NotFound,
                 "Recurso não encontrado",

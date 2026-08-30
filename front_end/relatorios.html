@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Relatórios administrativos da Biblioteca API">
+    <title>Relatórios | Biblioteca API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="relatorios">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html" aria-label="Biblioteca API - início"><span class="brand-mark" aria-hidden="true">B</span><span><span class="brand-name">Biblioteca API</span><span class="brand-subtitle">Gestão de acervo</span></span></a>
+            <p class="nav-label">Navegação</p>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a class="nav-link" href="index.html"><span class="nav-index">01</span>Visão geral</a>
+                <a class="nav-link" href="livros.html"><span class="nav-index">02</span>Livros</a>
+                <a class="nav-link" href="autores.html"><span class="nav-index">03</span>Autores</a>
+                <a class="nav-link" href="alunos.html"><span class="nav-index">04</span>Alunos</a>
+                <a class="nav-link" href="emprestimos.html"><span class="nav-index">05</span>Empréstimos</a>
+            </nav>
+            <div class="sidebar-footer">Dados conectados à API<br>Biblioteca API • 2026</div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topline"><span class="breadcrumb">Painel / Relatórios</span><span class="demo-label"><span class="demo-dot"></span>API conectada</span></div>
+            <header class="page-header">
+                <div><p class="eyebrow">Análise administrativa</p><h1 class="page-title">Relatórios da biblioteca</h1><p class="page-description">Consulte os títulos mais procurados, usuários inadimplentes e o histórico de circulação por período.</p></div>
+            </header>
+
+            <section class="reports-grid">
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Livros mais emprestados</h2><p class="panel-subtitle">Classificação considerando todo o histórico</p></div></div>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Posição</th><th>Livro</th><th>Autor</th><th>Empréstimos</th></tr></thead><tbody id="popular-books-body"><tr><td colspan="4" class="table-message">Carregando dados...</td></tr></tbody></table></div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Usuários inadimplentes</h2><p class="panel-subtitle">Alunos com empréstimos atualmente atrasados</p></div></div>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Aluno</th><th>E-mail</th><th>Empréstimos</th><th>Dias</th><th>Multa</th><th>Situação</th></tr></thead><tbody id="overdue-users-body"><tr><td colspan="6" class="table-message">Carregando dados...</td></tr></tbody></table></div>
+                </article>
+            </section>
+
+            <section class="report-history-section">
+                <form id="report-period-form" class="filter-bar report-filter">
+                    <div class="field"><label for="report-start-date">Data inicial</label><input id="report-start-date" type="date" required></div>
+                    <div class="field"><label for="report-end-date">Data final</label><input id="report-end-date" type="date" required></div>
+                    <div class="filter-actions"><button class="primary-action" type="submit">Gerar histórico</button></div>
+                </form>
+
+                <article class="panel">
+                    <div class="panel-header"><div><h2 class="panel-title">Histórico por período</h2><p id="history-report-count" class="panel-subtitle">Carregando registros...</p></div></div>
+                    <div class="table-wrap"><table class="data-table"><thead><tr><th>Aluno</th><th>Livro</th><th>Empréstimo</th><th>Previsão</th><th>Devolução</th><th>Status</th><th>Dias em atraso</th><th>Multa</th></tr></thead><tbody id="report-history-body"><tr><td colspan="8" class="table-message">Carregando dados...</td></tr></tbody></table></div>
+                </article>
+            </section>
+            <footer class="page-footer">Relatórios disponíveis exclusivamente para administradores.</footer>
+        </main>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>

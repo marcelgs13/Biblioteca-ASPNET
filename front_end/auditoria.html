@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Auditoria administrativa da Biblioteca API">
+    <title>Auditoria | Biblioteca API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="auditoria">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="index.html" aria-label="Biblioteca API - início"><span class="brand-mark" aria-hidden="true">B</span><span><span class="brand-name">Biblioteca API</span><span class="brand-subtitle">Gestão de acervo</span></span></a>
+            <p class="nav-label">Navegação</p>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a class="nav-link" href="index.html"><span class="nav-index">01</span>Visão geral</a>
+                <a class="nav-link" href="livros.html"><span class="nav-index">02</span>Livros</a>
+                <a class="nav-link" href="autores.html"><span class="nav-index">03</span>Autores</a>
+                <a class="nav-link" href="alunos.html"><span class="nav-index">04</span>Alunos</a>
+                <a class="nav-link" href="emprestimos.html"><span class="nav-index">05</span>Empréstimos</a>
+            </nav>
+            <div class="sidebar-footer">Dados conectados à API<br>Biblioteca API • 2026</div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topline"><span class="breadcrumb">Painel / Auditoria</span><span class="demo-label"><span class="demo-dot"></span>API conectada</span></div>
+            <header class="page-header">
+                <div><p class="eyebrow">Rastreabilidade</p><h1 class="page-title">Logs de auditoria</h1><p class="page-description">Acompanhe quem alterou os dados do sistema, qual ação foi executada e quando ela aconteceu.</p></div>
+            </header>
+
+            <section class="panel">
+                <div class="panel-header"><div><h2 class="panel-title">Histórico de ações</h2><p id="audit-count" class="panel-subtitle">Carregando registros...</p></div></div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>Usuário</th><th>Perfil</th><th>Ação</th><th>Detalhes</th><th>Data e hora</th><th>Registro</th></tr></thead>
+                        <tbody id="audit-body"><tr><td colspan="6" class="table-message">Carregando dados...</td></tr></tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="audit-previous" class="secondary-action" type="button">Anterior</button>
+                    <span id="audit-page-info">Página 1 de 1</span>
+                    <button id="audit-next" class="secondary-action" type="button">Próxima</button>
+                </div>
+            </section>
+            <footer class="page-footer">A consulta dos logs é exclusiva para administradores.</footer>
+        </main>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>

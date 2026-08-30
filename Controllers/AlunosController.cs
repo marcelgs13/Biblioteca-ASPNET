@@ -1,11 +1,13 @@
 using BibliotecaAPI.DTOs;
 using BibliotecaAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "ADMIN,BIBLIOTECARIO")]
 public class AlunosController(IBibliotecaService bibliotecaService) : ControllerBase
 {
     [HttpPost]
