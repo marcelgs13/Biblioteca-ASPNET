@@ -50,6 +50,7 @@ public interface IBibliotecaRepository
     Task<List<Reserva>> ListarReservasAsync(int? alunoId = null);
     Task<bool> ExisteReservaAtivaAsync(int alunoId, int livroId);
     Task<List<Reserva>> ListarReservasAguardandoAsync(int livroId, int limite);
+    Task<List<Reserva>> ListarReservasAguardandoAprovacaoExcedentesAsync(int livroId, int quantidadeMantida);
     Task<Reserva?> ObterReservaAguardandoAprovacaoAsync(int livroId, int alunoId);
     Task<Reserva?> ObterReservaPorIdAsync(int id);
     Task<int> ContarReservasAguardandoAprovacaoAsync(int livroId);

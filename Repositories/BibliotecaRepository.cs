@@ -354,6 +354,19 @@ public class BibliotecaRepository(BibliotecaDbContext context) : IBibliotecaRepo
             .ToListAsync();
     }
 
+    public Task<List<Reserva>> ListarReservasAguardandoAprovacaoExcedentesAsync(
+        int livroId,
+        int quantidadeMantida)
+    {
+        return context.Reservas
+            .Where(reserva => reserva.LivroId == livroId &&
+                reserva.Status == StatusReserva.AguardandoAprovacao)
+            .OrderBy(reserva => reserva.DataReserva)
+            .ThenBy(reserva => reserva.Id)
+            .Skip(quantidadeMantida)
+            .ToListAsync();
+    }
+
     public Task<Reserva?> ObterReservaAguardandoAprovacaoAsync(int livroId, int alunoId)
     {
         return context.Reservas

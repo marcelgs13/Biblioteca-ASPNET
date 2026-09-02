@@ -83,7 +83,6 @@ public class BibliotecaService(
     public async Task<LivroResponseDto> AtualizarLivroAsync(int id, AtualizarLivroDto dto)
     {
         var livro = await ObterLivroAsync(id);
-        var quantidadeAnterior = livro.Quantidade;
         var isbn = dto.ISBN.Trim();
         if (!string.Equals(livro.ISBN, isbn, StringComparison.OrdinalIgnoreCase) && await repository.ExisteISBNAsync(isbn))
             throw new ConflitoNegocioException("Já existe um livro cadastrado com este ISBN.");
@@ -98,10 +97,8 @@ public class BibliotecaService(
         livro.Quantidade = dto.Quantidade;
         livro.Localizacao = dto.Localizacao.Trim();
         livro.AutorId = dto.AutorId;
-        if (livro.Quantidade > quantidadeAnterior)
-        {
-            await PromoverSolicitacoesAsync(livro, DateTime.UtcNow);
-        }
+        await RebaixarSolicitacoesExcedentesAsync(livro);
+        await PromoverSolicitacoesAsync(livro, DateTime.UtcNow);
         await repository.AtualizarLivroAsync(livro);
         return MapearLivro(livro, autor.Nome);
     }
@@ -486,6 +483,18 @@ public class BibliotecaService(
                 Data = agora,
                 Tipo = "SolicitacaoAguardandoAprovacao"
             });
+        }
+    }
+
+    private async Task RebaixarSolicitacoesExcedentesAsync(Livro livro)
+    {
+        var excedentes = await repository.ListarReservasAguardandoAprovacaoExcedentesAsync(
+            livro.Id,
+            livro.Quantidade);
+
+        foreach (var reserva in excedentes)
+        {
+            reserva.Status = StatusReserva.AguardandoDisponibilidade;
         }
     }
 
