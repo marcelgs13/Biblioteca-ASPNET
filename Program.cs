@@ -13,28 +13,37 @@ using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks().AddCheck<BibliotecaHealthCheck>("database");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontEnd", policy =>
-        policy.WithOrigins("http://127.0.0.1:5500", "http://localhost:5500")
+        policy.WithOrigins(
+                "http://localhost",
+                "http://localhost:80",
+                "http://127.0.0.1",
+                "http://localhost:5500",
+                "http://127.0.0.1:5500"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
+
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddDbContext<BibliotecaDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
 builder.Services.AddScoped<IBibliotecaService, BibliotecaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
+
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
     ?? throw new InvalidOperationException("Configuração JWT ausente.");
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -50,6 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
     });
+
 builder.Services.AddAuthorization();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -65,12 +75,10 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
@@ -81,7 +89,10 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartLib API v1"));
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("FrontEnd");
 

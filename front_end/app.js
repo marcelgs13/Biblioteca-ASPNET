@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5293/api";
+const API_BASE_URL = "http://localhost:5000/api";
 const AUTH_STORAGE_KEY = "smartlib_auth";
 
 const STATUS = {

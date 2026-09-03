@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Container do Back-end (.NET)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: biblioteca_api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  # Container do Front-end (Nginx servindo HTML/JS/CSS)
+  frontend:
+    image: nginx:alpine
+    container_name: biblioteca_front
+    ports:
+      - "80:80"
+    volumes:
+      # Monta sua pasta local front_end dentro do Nginx
+      - ./front_end:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
