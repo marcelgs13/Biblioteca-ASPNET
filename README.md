@@ -23,6 +23,39 @@ O projeto usa `Models` para as entidades, `DTOs` para contratos HTTP, `Controlle
 - OpenAPI 3.1 e Swagger UI
 - HTML, CSS e JavaScript com Fetch API
 
+## Execução com Docker (Recomendado)
+
+A aplicação conta com uma arquitetura desacoplada conteinerizada: o front-end é servido via **Nginx** e o back-end via **ASP.NET Core**.
+
+### Pré-requisitos
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e em execução.
+
+### Subindo os contêineres
+
+Na raiz do projeto (onde está localizado o arquivo `docker-compose.yml`), execute o comando abaixo no terminal:
+
+```powershell
+docker compose up -d --build
+
+### URLs de Acesso
+
+- **Front-end Web:** [`http://localhost`](http://localhost) (porta 80)
+- **Swagger UI:** [`http://localhost:5000/swagger`](http://localhost:5000/swagger)
+
+### Comandos úteis do Docker
+
+- **Acompanhar logs dos contêineres:**
+  ```powershell
+  docker compose logs -f
+
+  - **Verificar status dos serviços:**
+  ```powershell
+  docker compose ps
+
+  - **Parar e remover os contêineres:**
+  ```powershell
+  docker compose down
+
 ## Execução local
 
 Pré-requisitos: .NET SDK 10, Git e a extensão Live Server do VS Code.
