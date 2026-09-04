@@ -36,6 +36,7 @@ Na raiz do projeto (onde está localizado o arquivo `docker-compose.yml`), execu
 
 ```powershell
 docker compose up -d --build
+```
 
 ### URLs de Acesso
 
@@ -47,14 +48,17 @@ docker compose up -d --build
 - **Acompanhar logs dos contêineres:**
   ```powershell
   docker compose logs -f
+  ```
 
-  - **Verificar status dos serviços:**
+- **Verificar status dos serviços:**
   ```powershell
   docker compose ps
+  ```
 
-  - **Parar e remover os contêineres:**
+- **Parar e remover os contêineres:**
   ```powershell
   docker compose down
+  ```
 
 ## Execução local
 
